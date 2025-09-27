@@ -12,6 +12,10 @@ An AI-powered multi-agent research assistant that automates deep literature revi
 - **Modern Web Interface**: Clean, responsive React frontend built with Vite
 - **RESTful API**: Flask-based backend with CORS support for seamless frontend integration
 
+## Architecture Diagram
+
+![Architecture](architecture.png)
+
 ## Tech Stack
 
 ### Backend
