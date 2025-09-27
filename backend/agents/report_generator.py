@@ -18,7 +18,7 @@ class ReportGeneratorAgent:
             f"Summary:\n{summary}\n\n"
             f"Web Results:\n{format_results(web_results)}\n\n"
             f"Publication Results:\n{format_results(pub_results)}\n\n"
-            "Format the report with sections, citations, and a conclusion."
+            "Format the report with sections, each section sould have the link of its reference link, overall citations, and a conclusion. Give a Table of Contents but without links."
         )
         try:
             response = self.llm.invoke(input=prompt)

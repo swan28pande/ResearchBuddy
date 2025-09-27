@@ -146,6 +146,38 @@ const ResearchReport = ({ topic }) => {
                   {children}
                 </a>
               ),
+              table: ({ children }) => (
+                <div className="overflow-x-auto my-4">
+                  <table className="min-w-full border-collapse border border-gray-600 text-sm">
+                    {children}
+                  </table>
+                </div>
+              ),
+              thead: ({ children }) => (
+                <thead className="bg-gray-700">
+                  {children}
+                </thead>
+              ),
+              tbody: ({ children }) => (
+                <tbody>
+                  {children}
+                </tbody>
+              ),
+              tr: ({ children }) => (
+                <tr className="border-b border-gray-600">
+                  {children}
+                </tr>
+              ),
+              th: ({ children }) => (
+                <th className="border border-gray-600 px-3 py-2 text-left font-semibold text-white bg-gray-700">
+                  {children}
+                </th>
+              ),
+              td: ({ children }) => (
+                <td className="border border-gray-600 px-3 py-2 text-white">
+                  {children}
+                </td>
+              ),
                 hr: () => <div className="my-8 border-t border-gray-600" />, // section separator
             }}
           >
