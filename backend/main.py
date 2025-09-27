@@ -5,7 +5,7 @@ def main():
 
     query = input("Enter your research query: ")
     report = build_and_run_workflow(query)
-    print(report)
+    # print(report)
 
 if __name__ == "__main__":
     main()

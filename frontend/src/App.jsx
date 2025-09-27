@@ -1,13 +1,18 @@
 import React from "react";
+import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react"
 import ReportForm from "./components/ReportForm";
 
 function App() {
   return (
-    <div style={{ padding: "2em", fontFamily: "sans-serif" }}>
-      <h1>Research Assistant</h1>
-      <ReportForm />
-    </div>
-  );
+    <BrowserRouter>
+      <Analytics />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;
