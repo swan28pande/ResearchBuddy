@@ -65,7 +65,4 @@ def build_and_run_workflow(query: str, generate_pdf: bool = True):
     initial_state = {"query": query}
     result = graph.invoke(initial_state)
     report_text = result["report"]
-    pdf_filename = None
-    if generate_pdf:
-        pdf_filename = reporter.save_report_as_pdf(report_text, filename="research_report.pdf")
-    return report_text, pdf_filename
+    return report_text

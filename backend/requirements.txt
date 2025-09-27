@@ -4,3 +4,5 @@ openai
 python-dotenv
 requests
 fpdf
+flask
+flask-cors

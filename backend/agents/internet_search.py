@@ -3,4 +3,5 @@ class InternetSearchAgent:
         self.web_api_client = web_api_client
 
     def search(self, query):
+        print("Searching about "+ query +" on internet....")
         return self.web_api_client.search(query)

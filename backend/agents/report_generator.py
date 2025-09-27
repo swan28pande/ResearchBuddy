@@ -31,12 +31,17 @@ class ReportGeneratorAgent:
         except Exception as e:
             return f"Error generating report: {e}"
 
-    def save_report_as_pdf(self, report_text, filename="report.pdf"):
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_auto_page_break(auto=True, margin=15)
-        pdf.set_font("Arial", size=12)
-        for line in report_text.split('\n'):
-            pdf.cell(0, 10, line, ln=True)
-        pdf.output(filename)
-        return filename
+    # def save_report_as_pdf(self, report_text, filename="report.pdf"):
+    #     pdf = FPDF()
+    #     pdf.add_page()
+    #     pdf.set_auto_page_break(auto=True, margin=15)
+    #     pdf.add_font('DejaVu', '', 'fonts/DejaVuSans.sfd', uni=True)
+    #     pdf.set_font('DejaVu', '', 12)
+    #     for line in report_text.split('\n'):
+    #         pdf.cell(0, 10, self.clean_text(line), ln=True)
+    #     pdf.output(filename)
+    #     return filename
+
+    # def clean_text(self, text):
+    #     # Replace em-dash and other common unicode with ASCII equivalents
+    #     return text.replace('\u2014', '-').encode('latin-1', 'ignore').decode('latin-1')
