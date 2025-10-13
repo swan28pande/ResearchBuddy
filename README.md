@@ -2,6 +2,10 @@
 
 An AI-powered multi-agent research assistant that automates deep literature reviews and report generation using language models and orchestration.
 
+## User Interface
+
+![Homepage](home.png)
+
 ## Features
 
 - **Multi-Agent Architecture**: Coordinated agents for internet search, academic publication retrieval, summarization, and report generation
