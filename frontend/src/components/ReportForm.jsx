@@ -13,7 +13,7 @@ export default function ReportForm() {
     setReport("");
     setPdfUrl("");
     try {
-      const response = await axios.post("http://localhost:8000/api/research", { query });
+      const response = await axios.post("http://localhost:5001/api/research", { query });
       setReport(response.data.report);
       setPdfUrl(response.data.pdf_url);
     } catch (err) {

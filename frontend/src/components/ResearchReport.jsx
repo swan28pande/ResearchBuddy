@@ -15,7 +15,7 @@ const ResearchReport = ({ topic }) => {
         if (!topic) return;
         setLoading(true);
         const response = await axios.post(
-          "http://localhost:8000/api/research",
+          "http://localhost:5001/api/research",
           { query: topic }
         );
 
