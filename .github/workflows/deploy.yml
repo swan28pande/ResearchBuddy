@@ -10,7 +10,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Debug SSH Key Length
-      run: echo "SSH key length: ${{ secrets.EC2_SSH_KEY }}" | wc -c
+    - run: |
+        echo "SSH key length:"
+        echo "${{ secrets.EC2_SSH_KEY }}" | wc -c
 
     - name: Deploy to EC2 via SSH
       uses: appleboy/ssh-action@master
