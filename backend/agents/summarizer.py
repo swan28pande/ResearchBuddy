@@ -7,9 +7,31 @@ class SummarizerAgent:
 
     def summarize(self, web_results, pub_results):
         def format_results(results):
-            if isinstance(results, list):
-                return "\n".join(f"- {str(r)}" for r in results)
-            return str(results)
+            """Format results for LLM processing"""
+            if not results:
+                return "No results available"
+            
+            formatted = []
+            for i, r in enumerate(results, 1):
+                if isinstance(r, dict):
+                    # Structured paper data from arXiv
+                    title = r.get('title', 'Unknown Title')
+                    abstract = r.get('abstract', 'No abstract available')
+                    authors = r.get('authors', [])
+                    authors_str = ', '.join(authors[:3])  # First 3 authors
+                    if len(authors) > 3:
+                        authors_str += f' et al. ({len(authors)} total)'
+                    
+                    formatted.append(
+                        f"{i}. **{title}**\n"
+                        f"   Authors: {authors_str}\n"
+                        f"   Abstract: {abstract}\n"
+                    )
+                else:
+                    # Fallback for non-structured data
+                    formatted.append(f"{i}. {str(r)}")
+            
+            return "\n".join(formatted)
 
         prompt = (
             "Summarize the following web and publication results for a research report:\n\n"
