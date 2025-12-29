@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "query": "Recent breakthroughs in room-temperature superconductivity (2023-2024)",
+    "category": "Physics",
+    "scores": {
+      "faithfulness": 4,
+      "relevancy": 5,
+      "formatting": 5
+    },
+    "justification": "The report is largely faithful to the retrieved sources, accurately reflecting the themes and findings discussed in the source summary. It covers skepticism, experimental challenges, and theoretical frameworks, aligning well with the retrieved information. However, some specific details, such as the exact nature of the skepticism or the precise experimental techniques, could be more explicitly tied to the sources, which is why it scores a 4 in faithfulness. The report is highly relevant to the query, as it thoroughly addresses recent breakthroughs and ongoing challenges in room-temperature superconductivity, scoring a 5 in relevancy. The formatting is excellent, with a clear Table of Contents, structured sections, and proper citations, earning a score of 5 in formatting."
+  },
+  {
+    "id": 2,
+    "query": "Impact of LLMs on software engineering productivity in 2024",
+    "category": "AI/Computer Science",
+    "scores": {
+      "faithfulness": 4,
+      "relevancy": 5,
+      "formatting": 5
+    },
+    "justification": "The report is largely faithful to the retrieved sources, accurately reflecting the key points about the impact of LLMs on software engineering productivity, including the integration of LLMs in development workflows, challenges like hallucination and biases, and the need for semantic understanding. However, there is a slight overemphasis on certain aspects like 'morescient' LLMs without extensive backing from the sources, which slightly affects faithfulness. The report is highly relevant to the query, thoroughly addressing the impact of LLMs on productivity in 2024, including challenges and opportunities, which aligns well with the query's focus. The formatting is excellent, with a clear Table of Contents, structured sections, and proper citations and links, making it easy to navigate and verify the information."
+  },
+  {
+    "id": 3,
+    "query": "Current status of mRNA vaccine research for cancer treatment",
+    "category": "Medicine",
+    "scores": {
+      "faithfulness": 4,
+      "relevancy": 5,
+      "formatting": 5
+    },
+    "justification": "The report is largely faithful to the retrieved sources, accurately reflecting the key points about mRNA vaccine research and its application in cancer treatment. However, there are some areas where the report could provide more direct citations or clearer connections to specific source details, which is why it scores a 4 in faithfulness. The report is highly relevant to the query, thoroughly addressing the current status of mRNA vaccine research for cancer treatment, including technological advances, clinical trials, and the role of collaborative networks, thus earning a score of 5 in relevancy. The formatting is excellent, with a clear Table of Contents, structured sections, and proper citations and links to sources, justifying a score of 5 in formatting."
+  },
+  {
+    "id": 4,
+    "query": "Developments in sustainable aviation fuels (SAF) for commercial flights",
+    "category": "Environment",
+    "scores": {
+      "faithfulness": 5,
+      "relevancy": 5,
+      "formatting": 5
+    },
+    "justification": "The research report is highly faithful to the retrieved sources, accurately reflecting the key findings and recommendations from the publications summarized. It effectively addresses the query by providing a comprehensive overview of developments in sustainable aviation fuels (SAF) for commercial flights, including technological advancements, economic and policy considerations, and complementary strategies for decarbonization. The report is well-structured, with a clear Table of Contents and proper citations, including links to the original sources, ensuring easy navigation and verification of information. Overall, the report is thorough, relevant, and well-formatted, making it a reliable resource for understanding the current state and future directions of SAF in aviation."
+  },
+  {
+    "id": 5,
+    "query": "Quantum computing error correction methods using surface codes",
+    "category": "Quantum Computing",
+    "scores": {
+      "faithfulness": 4,
+      "relevancy": 5,
+      "formatting": 5
+    },
+    "justification": "The report is largely faithful to the retrieved sources, accurately reflecting the focus on quantum error correction using surface codes and the significance of operating below the threshold. However, without access to the full articles, some specific details may be inferred rather than directly sourced, which slightly affects faithfulness. The report is highly relevant to the query, thoroughly addressing quantum computing error correction methods using surface codes, including theoretical and experimental aspects. The formatting is excellent, with a clear Table of Contents and proper citations/links to the sources, enhancing readability and credibility."
+  }
+]

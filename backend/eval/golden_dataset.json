@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "query": "Recent breakthroughs in room-temperature superconductivity (2023-2024)",
+    "expected_topics": ["LK-99", "Reddmatter", "Pressure-stabilized hydrides", "Verification status"],
+    "category": "Physics"
+  },
+  {
+    "id": 2,
+    "query": "Impact of LLMs on software engineering productivity in 2024",
+    "expected_topics": ["GitHub Copilot", "Devin", "Code generation efficiency", "Security concerns"],
+    "category": "AI/Computer Science"
+  },
+  {
+    "id": 3,
+    "query": "Current status of mRNA vaccine research for cancer treatment",
+    "expected_topics": ["Personalized vaccines", "Clinical trials", "Neoantigens", "Delivery mechanisms"],
+    "category": "Medicine"
+  },
+  {
+    "id": 4,
+    "query": "Developments in sustainable aviation fuels (SAF) for commercial flights",
+    "expected_topics": ["Biofuels", "Synthetic fuels", "Carbon capture", "E-fuels"],
+    "category": "Environment"
+  },
+  {
+    "id": 5,
+    "query": "Quantum computing error correction methods using surface codes",
+    "expected_topics": ["Surface codes", "Logical qubits", "Syndrome measurement", "Fault tolerance"],
+    "category": "Quantum Computing"
+  }
+]
