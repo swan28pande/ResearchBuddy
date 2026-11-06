@@ -6,34 +6,47 @@ const ResearchReport = ({ topic }) => {
   const [report, setReport] = useState("");
   const [loading, setLoading] = useState(false);
   const [refusalMsg, setRefusalMsg] = useState("");
+  const [stage, setStage] = useState("");
 
   useEffect(() => {
+    let cancelled = false;
+    const API = "http://localhost:5001";
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    // The backend queues the job (202 + job_id); poll its status until it finishes.
+    const waitForJob = async (jobId) => {
+      while (!cancelled) {
+        const { data } = await axios.get(`${API}/api/research/${jobId}`);
+        if (data.status === "finished") return data.result;
+        if (data.status === "failed") throw new Error(data.error || "Job failed");
+        setStage(data.stage || "Queued");
+        await sleep(1500);
+      }
+      return null;
+    };
+
     const generateReport = async () => {
       try {
         setReport("");
         setRefusalMsg(""); // Clear prior refusals
+        setStage("");
         if (!topic) return;
         setLoading(true);
-        const response = await axios.post(
-          "http://localhost:5001/api/research",
-          { query: topic }
-        );
-
-        if (
-          typeof response.data === "string" &&
-          response.data.toLowerCase().includes("unable to generate report")
-        ) {
-          setRefusalMsg(response.data);
-        } else {
-          setReport(response.data.report);
-        }
+        const response = await axios.post(`${API}/api/research`, { query: topic });
+        // 202 = queued in Redis; 200 = backend ran it inline (no Redis available)
+        const result =
+          response.status === 202 ? await waitForJob(response.data.job_id) : response.data;
+        if (!cancelled && result) setReport(result.report);
       } catch (error) {
-        setRefusalMsg("Error generating report.");
+        if (!cancelled) setRefusalMsg("Error generating report.");
         console.error("Error generating report:", error);
       }
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     };
     generateReport();
+    return () => {
+      cancelled = true;
+    };
   }, [topic]);
 
   return (
@@ -73,7 +86,7 @@ const ResearchReport = ({ topic }) => {
             className="mt-3 text-lg font-medium"
             style={{ color: "#EEFC7C" }}
           >
-            Generating research report...
+            {stage ? `${stage}...` : "Generating research report..."}
           </span>
         </div>
       ) : report ? (

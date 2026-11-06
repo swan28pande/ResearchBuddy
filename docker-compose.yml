@@ -1,12 +1,35 @@
 version: "3.9"
 
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
   backend:
     build: ./backend
     container_name: backend
     ports:
-      - "5001:5000" 
+      - "5001:5000"
     env_file:
-      - ./backend/.env 
+      - ./backend/.env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
     volumes:
-      - ./backend:/app 
+      - ./backend:/app
+
+  # Picks research jobs off the Redis queue. Scale with: docker compose up --scale worker=3
+  worker:
+    build: ./backend
+    command: rq worker research --url redis://redis:6379/0
+    env_file:
+      - ./backend/.env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    volumes:
+      - ./backend:/app

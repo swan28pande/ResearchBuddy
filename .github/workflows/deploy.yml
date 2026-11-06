@@ -33,8 +33,8 @@ jobs:
       - name: Run backend tests
         run: |
           cd backend
-          # Add your test command here
-          # pytest tests/
+          pip install -r requirements-dev.txt
+          pytest tests/ -q
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

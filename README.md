@@ -141,33 +141,57 @@ ResearchBuddy/
 
 ## Workflow
 
-1. **User Input**: User submits a research query through the web interface
-2. **Agent Coordination**: LangGraph orchestrates the multi-agent workflow
-3. **Parallel Search**: Internet and publication search agents run simultaneously
-4. **Content Summarization**: Summarizer agent processes and synthesizes findings
-5. **Report Generation**: Report generator creates a comprehensive research report
-6. **PDF Export**: Report is automatically converted to PDF format
-7. **User Delivery**: User receives both text and PDF versions of the report
+```
+Flask POST /api/research ──► Redis queue ──► rq worker
+                                               │
+           START ─► planner ─Send×N─► execute_subtask (parallel) ─► synthesizer ─► END
+                                          │
+                                     ToolRouter (retry + fallback) ─► 13 tools
+```
+
+1. **Queue**: `POST /api/research` puts the job on a Redis queue (RQ) and returns a `job_id`. Workers (`rq worker research`) run it, and the UI polls `GET /api/research/<job_id>` for progress. If Redis is unreachable, the API runs the job inline instead.
+2. **Plan** (`workflows/research_workflow.py`): an LLM splits the query into up to `MAX_SUBTASKS` (5) subtasks, each tagged with a tool category. Invalid plans fall back to a default web + academic plan.
+3. **Execute in parallel**: LangGraph's `Send` API starts one `execute_subtask` node per subtask in the same step (`MAX_CONCURRENCY`, default 5). Results merge through an `operator.add` reducer.
+4. **Synthesize**: sources are de-duplicated and numbered. The LLM writes the report citing `[n]`, and the References list is generated from the real tool results, so links are never invented by the model.
+
+### Tool layer (`backend/tools/`)
+
+Every tool implements `Tool.run(input) -> list[Source]` and is registered in a `ToolRegistry`. Adding an integration means writing one class and adding it to `DEFAULT_TOOLS`.
+
+| Category | Tools (fallback order) |
+|---|---|
+| `web_search` | tavily → wikipedia → duckduckgo |
+| `academic_search` | semantic_scholar → arxiv → openalex → crossref → pubmed |
+| `code_search` | github |
+| `discussion_search` | hackernews |
+| `code_execution` | python_exec (subprocess, timeout, no env secrets; **not** a security sandbox, so disable with `CODE_EXECUTION_ENABLED=0`) |
+| `document_parsing` | pdf_reader → web_page_reader |
+
+`ToolRouter` gives each tool up to 3 attempts with exponential backoff (1s, 2s, capped at 8s, plus jitter) and a per-call timeout. Non-retryable errors (4xx, bad input) and empty results skip straight to the next tool in the category. Every attempt is recorded and shown at the end of the report.
+
+### Running with the queue
+
+```bash
+docker compose up --build          # redis + backend + worker
+# or locally:
+redis-server &
+cd backend && rq worker research --worker-class rq.worker.SimpleWorker &   # SimpleWorker avoids fork issues on macOS
+python app.py
+```
+
+### Tests
+
+```bash
+cd backend && pip install -r requirements-dev.txt && pytest tests/ -q
+```
 
 ## API Endpoints
 
 ### POST `/api/research`
-Generate a research report for a given query.
+Body `{"query": "Recent advances in quantum computing"}`. Returns `202 {"job_id", "status_url"}`. With `?sync=1`, or when Redis is down, it returns the result directly (`200`).
 
-**Request Body:**
-```json
-{
-  "query": "Recent advances in quantum computing"
-}
-```
+### GET `/api/research/<job_id>`
+Returns `{"status": "queued|started|finished|failed", "stage", "progress", "result"}`. `result` contains `report`, `subtasks`, `sources` and `tool_log`.
 
-**Response:**
-```json
-{
-  "report": "Generated research report text...",
-  "pdf_url": "/api/pdf/research_report.pdf"
-}
-```
-
-### GET `/api/pdf/<filename>`
-Download a generated PDF report.
+### GET `/api/tools`
+Lists the registered tools, their categories, and whether each is available (for example, whether its API key is set).

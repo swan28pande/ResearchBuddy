@@ -4,9 +4,8 @@ import logging
 from typing import List, Dict
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
-from workflows.research_workflow import build_and_run_workflow, ResearchState
-from langgraph.graph import StateGraph, START, END
+from langchain_core.prompts import ChatPromptTemplate
+from workflows.research_workflow import run_research
 
 # Load environment variables
 load_dotenv()
@@ -97,30 +96,12 @@ def run_evaluation():
         # to get both the summary (sources) and the final report.
         
         try:
-            # We need to import the internal components to get the state
-            from agents.prompt_manager import PromptManagerAgent
-            from agents.internet_search import InternetSearchAgent
-            from agents.publication_search import PublicationSearchAgent
-            from agents.summarizer import SummarizerAgent
-            from agents.report_generator import ReportGeneratorAgent
-            from api_clients.tavily import TavilyClient
-            from api_clients.arxiv import ArxivClient
-
-            tavily_client = TavilyClient(os.getenv("TAVILY_API_KEY"))
-            arxiv_client = ArxivClient()
-            
-            prompt_manager = PromptManagerAgent()
-            internet_agent = InternetSearchAgent(tavily_client)
-            pub_agent = PublicationSearchAgent([arxiv_client])
-            summarizer = SummarizerAgent()
-            reporter = ReportGeneratorAgent()
-
-            # Execute step by step for evaluation
-            prompt_results = prompt_manager.prompt_creation(query)
-            web_results = internet_agent.search(prompt_results)
-            pub_results = pub_agent.search(prompt_results)
-            summary = summarizer.summarize(web_results, pub_results)
-            report = reporter.generate_report(prompt_results, summary, web_results, pub_results)
+            # Run the full workflow and give the judge the same numbered sources the report cites.
+            state = run_research(query)
+            report = state["report"]
+            summary = "\n\n".join(
+                f"[{s['n']}] {s['title']} ({s.get('url', '')})\n{s['snippet']}" for s in state.get("sources", [])
+            )
 
             # Evaluate
             evaluation = judge.evaluate(query, summary, report)

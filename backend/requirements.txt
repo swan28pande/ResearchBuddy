@@ -13,3 +13,7 @@ langchain-core
 langchain-openai
 fpdf
 gunicorn
+requests
+redis
+rq
+pypdf
